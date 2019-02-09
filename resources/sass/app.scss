@@ -1,0 +1,127 @@
+// Fonts
+@import url('//fonts.googleapis.com/css?family=Raleway:300,400,600'); // Raleway
+@import url('//fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600'); // Josefin Slab --> Navbar
+@import url('//fonts.googleapis.com/css?family=Lato:100i,300,300i,400'); // Lato
+@import url('//fonts.googleapis.com/icon?family=Material+Icons');
+
+@font-face {
+    font-family: 'HotelDeParis';
+    src: url('../fonts/hotel_de_paris.ttf') format('truetype');
+}
+
+// Variables
+@import "variables";
+
+
+// Bootstrap v4.0.0
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+// @import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+// @import "~bootstrap/scss/images";
+// @import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+// @import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+// @import "~bootstrap/scss/button-group";
+// @import "~bootstrap/scss/input-group";
+// @import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+// @import "~bootstrap/scss/breadcrumb";
+// @import "~bootstrap/scss/pagination";
+// @import "~bootstrap/scss/badge";
+// @import "~bootstrap/scss/jumbotron";
+// @import "~bootstrap/scss/alert";
+// @import "~bootstrap/scss/progress";
+// @import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+// @import "~bootstrap/scss/close";
+@import "~bootstrap/scss/modal";
+// @import "~bootstrap/scss/tooltip";
+// @import "~bootstrap/scss/popover";
+// @import "~bootstrap/scss/carousel";
+@import "~bootstrap/scss/utilities";
+// @import "~bootstrap/scss/print";
+
+//@import "~bootstrap/scss/bootstrap";
+
+// Font Awesome 4.7.0
+@import "~font-awesome/scss/font-awesome.scss";
+
+// Material
+@import "@material/button/mdc-button";
+@import "@material/list/mdc-list";
+@import "@material/card/mdc-card";
+@import "@material/icon-button/mdc-icon-button";
+
+
+
+//=================================================================
+
+@import "header";
+@import "footer";
+
+@import "accueil";
+@import "activites";
+@import "presentation";
+@import "realisations";
+@import "presse";
+@import "contact";
+
+@import "theme";
+@import "albumeffect";
+
+@import "dashboard";
+
+
+.cover-center {
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.mdc-button, .mdc-icon-button {
+  outline: none !important; // this one
+}
+
+// round and white icon in list (drive style)
+.mdc-list--avatar-list .mdc-list-item__graphic {
+    background-color: rgba(0,0,0,.3);
+    color: #fff;
+}
+
+.spin-reverse {
+  -webkit-animation: spin-reverse 2s infinite linear;
+  animation: spin-reverse 2s infinite linear;
+}
+@-webkit-keyframes spin-reverse {
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  0% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes spin-reverse {
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  0% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+
+.no-link {
+	text-decoration: none !important;
+}

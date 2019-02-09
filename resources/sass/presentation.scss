@@ -1,0 +1,109 @@
+@media screen and (max-width: 767px) {
+  .timeline {
+    list-style-type: none;
+    font-family: 'Lato', sans-serif;
+
+    li {
+      display: flex;
+
+      .timestamp {
+        font-weight: 400;
+        min-width: 70px;
+        flex: auto;
+        text-align: center;
+      }
+
+      .status {
+        margin-left: 20px;
+        font-weight: 300;
+
+        border-left: 2px solid #8c8c8c;
+        flex-direction: column;
+        justify-content: center;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        position: relative;
+        margin-right: 20px;
+
+        &:before {
+          background-color: white;
+          border: 1.5px solid #8c8c8c;
+          border-radius: 20px;
+          content: '';
+          height: 12px;
+          left: -7px;
+          position: absolute;
+          top: 4px;
+          width: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .timeline {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    font-family: 'Lato', sans-serif;
+
+    li:last-child, li:first-child {
+      .mask {
+        position: absolute;
+        top: -2px;
+        width: 50%;
+        height: 2px;
+        background-color: #ffffff;
+      }
+    }
+
+    li:last-child .mask {
+      right: -6px;
+    }
+
+    li:first-child .mask {
+      left: -6px;
+    }
+  }
+  .timeline .timestamp {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 15px;
+    font-weight: 400;
+  }
+  .timeline .status {
+    display: flex;
+    border-top: 1px solid #8c8c8c;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10px;
+    padding-top: 15px;
+    position: relative;
+    width: 250px;
+    font-weight: 300;
+    text-align: center;
+  }
+  .timeline .status::before {
+    background-color: white;
+    border: 1.5px solid #8c8c8c;
+    border-radius: 20px;
+    content: '';
+    height: 12px;
+    left: 119px;
+    position: absolute;
+    top: -6px;
+    width: 12px;
+  }
+
+}
+
+.bg-img {
+  // 16:9
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  padding-bottom: 56%;
+  margin-top: 10px;
+
+}

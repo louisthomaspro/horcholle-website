@@ -1,0 +1,29 @@
+.is-animated {
+  animation: .6s zoom-in;
+}
+
+@keyframes zoom-in {
+  0% {
+   transform: scale(.8);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.f-filter .active {
+    border: 2px solid #ccc;
+}
+
+.f-filter {
+    text-align: center;
+    padding: 30px;
+
+    a {
+      background: #ebebeb;
+      padding: 10px 25px;
+      border-radius: 5px;
+      margin: 0px 5px;
+      color: #4b4b4b;
+    }
+}

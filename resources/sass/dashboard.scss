@@ -1,0 +1,96 @@
+.img-preview {
+  width: 72px;
+  height: 72px;
+  margin-right: 18px;
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+
+
+
+
+
+
+/* vue-stepper styling */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1em;
+  
+  .progress {
+    position: absolute;
+    top: 2em;
+    height: 5px;
+    margin: 0;
+    box-shadow: none;
+    background-color: #cdcdcd;
+
+    
+    .progress-bar {
+    	width: 0px;
+    	height: 5px;
+      background-color: #46c0bd;
+      transition: all .4s .5s;
+    }
+  }
+  
+  .step {
+    text-align: center;
+    z-index: 2;
+    width: 160px;
+
+    .step-circle {
+    	margin: auto;
+		width: 45px;
+		height: 45px;
+		border-radius: 50%;
+		background-color: rgba(0,0,0,.3);
+		color: #fff;
+		transition: all 1s;
+
+		
+
+		.step-number {
+			font-size: 18px;
+	    	line-height: 40px;
+			padding: 0.5em;
+			color: white;
+			border-radius: 2em;
+			width: 35px;
+			height: 35px;
+			margin: auto;
+		}
+
+		.material-icons {
+			font-size: 26px;
+			line-height: 45px;
+		}
+
+		&.current {
+			background-color: #8a93d8;
+		}
+
+		&.done {
+			background-color: #7aca9a;
+   		}
+
+   		&.failed {
+			background-color: #dc6f6f;
+   		}
+
+    }
+
+
+    .step-label {
+      padding-top: 10px;
+    }
+
+
+  }
+}
+
+

@@ -1,0 +1,31 @@
+#waterfall li {
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform: translateY(100px);
+  padding: 5px;
+}
+
+#waterfall li.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s, top 1s;
+}
+
+#waterfall li > img {
+  color: rgba(0,0,0,0.6);
+  font-size: 32px;
+  // border-radius: 3px;
+  margin: 10px;
+  background: rgb(255,255,255);
+  // border: 1px solid rgba(038, 191, 64, 0);
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+#waterfall li > img:hover {
+  transform: translateY(-10px);
+  // border: 1px solid #c6c6c6;
+  box-shadow: 0 5px 7px #c6c6c6;
+  transition: all 0.3s;
+}

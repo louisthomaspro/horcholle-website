@@ -1,0 +1,36 @@
+.navbar {
+  min-height: 75px;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+}
+
+.navbar-light .navbar-brand {
+  color: rgba(110, 110, 110, 0.9);
+  font-size: 22px;
+
+  &:hover {
+    color: rgba(69, 69, 69, 0.9);
+  }
+}
+
+.dropdown-item {
+	color: rgba(0, 0, 0, 0.5);
+}
+.dropdown-item.active, .dropdown-item:active {
+    color: rgba(0, 0, 0, 0.9);
+    background-color: #f8f9fa;
+}
+
+
+@media only screen and (max-width: 991px) {
+    .no-mobile-dropdown {
+      display: none !important;
+      &:after {
+        content: none !important;
+      }
+    }
+
+}

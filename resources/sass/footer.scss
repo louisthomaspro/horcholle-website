@@ -1,0 +1,18 @@
+.footer {
+  background: #fafafa;
+  padding: 0px 20px 0px 20px;
+  text-align: center;
+  font-size: 14px;
+  height: 75px;
+  line-height: 75px;
+
+  	.parent {
+  		display: inline-block;
+   		vertical-align: middle;
+
+		span {
+			color: #b1b1b1;
+		}
+	}
+
+}
