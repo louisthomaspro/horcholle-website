@@ -17,7 +17,7 @@ if (!function_exists('initGoogleStorage')) {
         // GOOGLE BUCKET
         // https://googleapis.github.io/google-cloud-php/#/docs/google-cloud/v0.93.0/storage/storageclient
         $storage = new Google\Cloud\Storage\StorageClient([
-          'projectId' => "horcholle-website",
+          'projectId' => "horcholle",
           'keyFilePath' => base_path().'/horcholle-storage-access.json'
         ]);
         $storage->registerStreamWrapper();
