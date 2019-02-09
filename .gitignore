@@ -13,7 +13,7 @@ yarn-error.log
 credentials.tar.gz
 app.yaml
 
-horcholle-continuous-integration.json
-horcholle-storage-access.json
+
+client-secret*.json
 
 feed.sql
