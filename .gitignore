@@ -3,17 +3,18 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
 
-credentials.tar.gz
+.env
 app.yaml
+credentials.tar.gz
 
 
-client-secret*.json
+secrets
 
 feed.sql
