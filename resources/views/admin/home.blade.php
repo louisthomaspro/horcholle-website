@@ -12,7 +12,7 @@
           <div class="card-body">
             <ul class="list-group">
                <li class="list-group-item d-flex justify-content-between align-items-center"><div><button id="syncRealisations" type="button" class="btn btn-primary mr-2">Lancer la synchronisation</button>Synchroniser les réalisations</div><small class="text-muted">.</small></li>
-              <li class="list-group-item d-flex justify-content-between align-items-center"><div><button id="syncPictures" type="button" class="btn btn-primary mr-2">Lancer la synchronisation</button>Synchroniser les images (page réalisation exclue)</div><small class="text-muted">.</small></li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"><div><button id="syncPictures" type="button" class="btn btn-primary mr-2">Lancer la synchronisation</button>Synchroniser les images (page réalisations exclue)</div><small class="text-muted">.</small></li>
             </ul>
             
             <br>

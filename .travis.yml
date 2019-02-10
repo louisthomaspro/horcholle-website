@@ -17,8 +17,8 @@ before_install:
 - tar -xzf credentials.tar.gz
 - composer self-update
 - composer install --no-interaction
-script:
-- echo "No Script to run"
+script: 
+- vendor/bin/phpunit
 deploy:
   provider: gae
   skip_cleanup: true
