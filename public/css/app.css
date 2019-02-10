@@ -12846,6 +12846,11 @@ html, body {
   margin-right: 12px;
 }
 
+.contact_info a {
+  color: #2b729a;
+  text-decoration: underline;
+}
+
 .text-style .category {
   font-family: 'Lato', sans-serif;
   font-weight: 300;

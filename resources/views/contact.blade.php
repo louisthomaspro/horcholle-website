@@ -4,33 +4,30 @@
 
 @section('content')
   <div class="container">
-    <div class="row justify-content-center mt-5 mb-5 flex-column-reverse flex-md-row">
+    <div class="row justify-content-center mt-5 mb-5 flex-column flex-md-row">
       <div class="col-md-6">
 
         
         
         <h2 class="title text-center mt-4">@include('templates.texteditable', ["page" => "contact", "context" => "title", "id" => "main_title"])</h2>
         <h4 class="text-center text mt-4">@include('templates.texteditable', ["page" => "contact", "context" => "title", "id" => "sub_title"])</h4>
-        
-        <div class="row justify-content-center mt-5 contact_info">
-          <div class="col-12">
+        <div class="mt-5 ml-3">
+            <div class="contact_info mb-3">
             <i class="fa fa-map-marker" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "adress"])
-          </div> 
-        </div>
-        <div class="row justify-content-center mt-3 contact_info">
-          <div class="col-12">
+            </div>
+            <div class="contact_info mb-3">
             <i class="fa fa-clock-o" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "schedule"])
-          </div> 
-        </div>
-        <div class="row justify-content-center contact_info mb-5">
-          <div class="col-xl-6 mt-3">
+            </div>
+            <div class="contact_info mb-3">
             <i class="fa fa-phone" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "phone"])
-          </div>
-          <div class="col-xl-6 mt-3">
+            </div>
+            <div class="contact_info mb-3">
             <i class="fa fa-envelope" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "mail"])
-          </div>
-        </div>
-
+            </div>
+            <div class="contact_info mb-3">
+            <i class="fa fa-facebook" aria-hidden="true"></i><a href="https://www.facebook.com/SARL-Horcholle-Fabien-150517972410986/" target="_blank">Suivez-nous !</a>
+            </div>
+            </div>
 
 
       </div>
