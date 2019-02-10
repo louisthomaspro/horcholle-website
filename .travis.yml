@@ -15,17 +15,19 @@ before_install:
 - if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash;
   fi
 - tar -xzf credentials.tar.gz
+- echo "Authenticate with gcloud";
+- gcloud auth activate-service-account --key-file secrets/travis-cloud-sql-access.json;
 - composer self-update
 - composer install --no-interaction
 - wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O ${HOME}/google-cloud-sdk/cloud_sql_proxy
 - chmod +x ${HOME}/google-cloud-sdk/cloud_sql_proxy
-- ${HOME}/google-cloud-sdk/cloud_sql_proxy -instances=horcholle:europe-west1:horcholle-instance-prod=tcp:3307
-script: 
+- "${HOME}/google-cloud-sdk/cloud_sql_proxy -instances=horcholle:europe-west1:horcholle-instance-prod=tcp:3307"
+script:
 - vendor/bin/phpunit
 deploy:
   provider: gae
   skip_cleanup: true
-  keyfile: client-secret-travis.json
+  keyfile: secrets/travis-build-access.json
   project: horcholle
   default: true
   on: master
