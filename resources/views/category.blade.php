@@ -21,8 +21,7 @@
           <div class="row mb-4">
             @foreach ($album['pictures'] as $picture)
             <div class="col-md-6">
-              <a href="{{ bucket_url($picture['url']) }}" class="img_lg" style="background-image: url({{ bucket_url($picture['url']) }}); width: 100%; height: 250px; display: block;background-position: center;background-size: cover; margin-bottom: 30px;">
-                <!-- <img data-src="{{ asset($picture['url']) }}" alt="{{ $picture['name'] }}" class="lazyload img-responsive" style="width: 100%;margin-bottom: 20px;"> --> {{-- AJOUTER ALT --}}
+              <a href="{{ bucket_url($picture['url']) }}" class="img_lg" role="img" aria-label="{{ $picture['name'] }}"style="background-image: url({{ bucket_url($picture['url']) }}); width: 100%; height: 250px; display: block;background-position: center;background-size: cover; margin-bottom: 30px;">
               </a>
             </div>
             @endforeach
