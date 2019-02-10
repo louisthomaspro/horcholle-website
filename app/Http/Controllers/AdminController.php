@@ -204,25 +204,33 @@ class AdminController extends Controller
       }
 
 
+      $endSortValue = strspn($file['filename'], "0123456789");
+      $sortValue = substr($file['filename'], 0, $endSortValue);
+      $filename = substr($file['filename'], $endSortValue + 1);
+      if ($sortValue == "") { // if there is no number at the begin of the filename
+        $sortValue = 999;
+        $filename = $file['filename'];
+      } else {
+        $filename = substr($file['filename'], $endSortValue + 1);
+      }
       
-
       
 
 
       // Insert or upadte : folders, pictures, Gdoc
       if (in_array($file['basename'], $local_basename)) { // update
         
-          DB::update('update realisations set name=?, type=?, path=?, filename=?, extension=?, timestamp=?, mimetype=?, size=?, dirname=?, hierarchy=?, parent_id=?, comment=?, img_path=? where basename=?', 
-          [ $file['name'], $file['type'], $file['path'], $file['filename'], $file['extension'], $file['timestamp'], 
+          DB::update('update realisations set name=?, type=?, path=?, filename=?, extension=?, timestamp=?, mimetype=?, size=?, dirname=?, hierarchy=?, parent_id=?, sort=?, comment=?, img_path=? where basename=?', 
+          [ $file['name'], $file['type'], $file['path'], $filename, $file['extension'], $file['timestamp'], 
           array_key_exists('mimetype', $file) ? $file['mimetype'] : '',
-          $file['size'], $file['dirname'], $hierarchy, $parent_id, $comment, $img_path, $file['basename'] ]);
+          $file['size'], $file['dirname'], $hierarchy, $parent_id, $sortValue, $comment, $img_path, $file['basename'] ]);
           $log_msg .= "update";
 
       } else { // insert
-        DB::insert('insert into realisations (name, type, path, filename, extension, timestamp, mimetype, size, dirname, basename, hierarchy, parent_id, comment, img_path) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [ $file['name'], $file['type'], $file['path'], $file['filename'], $file['extension'], $file['timestamp'], 
+        DB::insert('insert into realisations (name, type, path, filename, extension, timestamp, mimetype, size, dirname, basename, hierarchy, parent_id, sort=?, comment, img_path) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [ $file['name'], $file['type'], $file['path'], $filename, $file['extension'], $file['timestamp'], 
         array_key_exists('mimetype', $file) ? $file['mimetype'] : '',
-        $file['size'], $file['dirname'], $file['basename'], $hierarchy, $parent_id, $comment, $img_path ]);
+        $file['size'], $file['dirname'], $file['basename'], $hierarchy, $parent_id, $sortValue, $comment, $img_path ]);
         $log_msg .= "insert";
       }
 

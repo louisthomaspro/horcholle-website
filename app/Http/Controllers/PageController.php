@@ -86,7 +86,7 @@ class PageController extends Controller
     $categories = DB::select('
       select category.id, category.filename, image.img_path from realisations category
       left join realisations image on category.path = image.dirname
-      where category.hierarchy = 1 and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp")
+      where category.hierarchy = 1 and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp") order by category.sort
     ');
     $info = self::getInfoPage("realisations");
     return view('realisations', ['pageTitle' => 'Réalisations', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'categories' => $categories]);
@@ -95,24 +95,24 @@ class PageController extends Controller
   public function category($category_id)
   {
 
-    $category_name = DB::select('select name from realisations where id=?',[$category_id])[0]->name;
+    $category_name = DB::select('select filename from realisations where id=?',[$category_id])[0]->filename;
 
     // changer "image/%" en integer
     $albums = DB::select('
-      select album.id, album.name, description.comment, image.filename, image.img_path from realisations album
+      select album.id, album.filename as albumfilename, description.comment, image.filename as picturefilename, image.img_path from realisations album
       inner join realisations image on image.parent_id = album.id
       left join realisations description on description.dirname = album.path and description.mimetype like "application/vnd.google-apps.document"
-      where album.parent_id=? and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp")
+      where album.parent_id=? and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp") order by album.sort, image.sort
       ',[$category_id]);
 
     $albums_array = array();
     foreach ($albums as $album) {
       // create album
       if (!array_key_exists($album->id, $albums_array)) {
-        $albums_array[$album->id] = array("name" => $album->name, "description" => nl2br($album->comment), "pictures" => array());
+        $albums_array[$album->id] = array("name" => $album->albumfilename, "description" => nl2br($album->comment), "pictures" => array());
       }
       // add pictures to album
-      array_push($albums_array[$album->id]["pictures"], array("name" => $album->filename, "url" => $album->img_path));
+      array_push($albums_array[$album->id]["pictures"], array("name" => $album->picturefilename, "url" => $album->img_path));
     }
 
     //dd($albums_array);
