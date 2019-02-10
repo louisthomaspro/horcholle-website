@@ -1,0 +1,42 @@
+runtime: php72
+
+env_variables:
+  ## Put production environment variables here.
+  APP_KEY: xxx
+  APP_STORAGE: /tmp
+  VIEW_COMPILED_PATH: /tmp
+  CACHE_DRIVER: database
+  SESSION_DRIVER: database
+  ## Set these environment variables according to your CloudSQL configuration.
+  DB_DATABASE: xxx
+  DB_USERNAME: xxx
+  DB_PASSWORD: xxx
+  DB_SOCKET: /cloudsql/xxx
+  LOG_CHANNEL: stackdriver
+  GOOGLE_STORAGE_BUCKET: xxx
+
+
+runtime_config:
+  document_root: public
+
+
+handlers:
+  # - url: /favicon\.ico
+  #   static_files: favicon.ico
+
+  - url: /css
+    static_dir: public/css
+
+  - url: /js
+    static_dir: public/js
+
+  - url: /img
+    static_dir: public/img
+
+  - url: /fonts
+    static_dir: public/fonts
+
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
