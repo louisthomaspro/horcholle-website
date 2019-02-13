@@ -27,6 +27,23 @@ if (!function_exists('initGoogleStorage')) {
 
 }
 
+
+if (!function_exists('initGoogleDatastore')) {
+
+    function initGoogleDatastore() {
+        // GOOGLE DATASTORE
+        // https://github.com/googleapis/google-cloud-php#google-cloud-datastore-ga
+        $datastore = new Google\Cloud\Datastore\DatastoreClient([
+            'projectId' => "horcholle",
+            'keyFilePath' => base_path().'/secrets/horcholle-datastore-access.json'
+        ]);
+
+        return $datastore;
+    }
+
+}
+
+
 if (!function_exists('getFiles')) {
 
  function getFiles($directory) // ex : "img/"
