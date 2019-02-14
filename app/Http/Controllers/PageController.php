@@ -2,151 +2,139 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-
-
 use App\Library\Drive;
+use Illuminate\Support\Facades\DB;
 
 
 /**
-* Page controller
-* Handle navigation for visitors
-*/
+ * Page controller
+ * Handle navigation for visitors
+ */
 class PageController extends Controller
 {
 
 
-
-  function getInfoPage($page) {
-    
-    $texts = array();
-    $pictures = array();
-
-    // TEXTS
-    $lines = DB::select('select context, id, value from texts where page like ?', [ $page ]);
-    foreach ($lines as $row) {
-      // create context
-      if (!array_key_exists($row->context, $texts)) {
-        $texts[$row->context] = array();
-      }
-      // $texts[$row->context][$row->id] = nl2br(str_replace(" ", " &nbsp;", $row->value));
-      $texts[$row->context][$row->id] = htmlentities($row->value);
+    public function accueil()
+    {
+        if (url()->current() == url('/')) {
+            return redirect()->route('accueil');
+        }
+        $info = self::getInfoPage("accueil");
+        return view('accueil', ['pageTitle' => 'Accueil', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'page' => 'accueil']);
     }
 
-    // IMG
-    $lines = DB::select('select context, id, img_path, alt from pictures where page like ? order by id', [ $page ]);
-    foreach ($lines as $row) {
-      // create context
-      if (!array_key_exists($row->context, $pictures)) {
-        $pictures[$row->context] = array();
-      }
-      $pictures[$row->context][$row->id] = array("img_path" => $row->img_path, "alt" => $row->alt);
+    function getInfoPage($page)
+    {
+
+        $texts = array();
+        $pictures = array();
+
+        // TEXTS
+        $lines = DB::select('select context, id, value from texts where page like ?', [$page]);
+        foreach ($lines as $row) {
+            // create context
+            if (!array_key_exists($row->context, $texts)) {
+                $texts[$row->context] = array();
+            }
+            // $texts[$row->context][$row->id] = nl2br(str_replace(" ", " &nbsp;", $row->value));
+            $texts[$row->context][$row->id] = htmlentities($row->value);
+        }
+
+        // IMG
+        $lines = DB::select('select context, id, img_path, alt from pictures where page like ? order by id', [$page]);
+        foreach ($lines as $row) {
+            // create context
+            if (!array_key_exists($row->context, $pictures)) {
+                $pictures[$row->context] = array();
+            }
+            $pictures[$row->context][$row->id] = array("img_path" => $row->img_path, "alt" => $row->alt);
+        }
+
+
+        return array("texts" => $texts, "pictures" => $pictures);
     }
 
-
-    return array("texts" => $texts, "pictures" => $pictures);
-  }
-
-
-  public function accueil()
-  {
-    if (url()->current() == url('/')) {
-      return redirect()->route('accueil');
-    }
-    $info = self::getInfoPage("accueil");
-    return view('accueil', ['pageTitle' => 'Accueil', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'page' => 'accueil']);
-  }
-
-  public function activites()
-  {
-    $info = self::getInfoPage("activites");
-    return view('activites', ['pageTitle' => 'Activités', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
-  }
-
-  public function presentation()
-  {
-    $info = self::getInfoPage("presentation");
-    return view('presentation', ['pageTitle' => 'Présentation', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
-  }
-
-  public function realisations()
-  {
-    
-    // $categories = DB::select('
-    //   select c.name, c.thumbnail_id, c.id, p.url from category c
-    //   INNER JOIN picture p on c.thumbnail_id = p.id
-    // ');
-
-    $categories = DB::select('
-      select category.id, category.filename, image.img_path from realisations category
-      left join realisations image on category.path = image.dirname
-      where category.hierarchy = 1 and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp") order by category.sort
-    ');
-    $info = self::getInfoPage("realisations");
-    return view('realisations', ['pageTitle' => 'Réalisations', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'categories' => $categories]);
-  }
-
-  public function category($category_id)
-  {
-
-    $category_name = DB::select('select filename from realisations where id=?',[$category_id])[0]->filename;
-
-    // changer "image/%" en integer
-    $albums = DB::select('
-      select album.id, album.filename as albumfilename, description.comment, image.filename as picturefilename, image.img_path from realisations album
-      inner join realisations image on image.parent_id = album.id
-      left join realisations description on description.dirname = album.path and description.mimetype like "application/vnd.google-apps.document"
-      where album.parent_id=? and image.mimetype in ("image/jpeg", "image/png", "image/gif", "image/bmp") order by album.sort, image.sort
-      ',[$category_id]);
-
-    $albums_array = array();
-    foreach ($albums as $album) {
-      // create album
-      if (!array_key_exists($album->id, $albums_array)) {
-        $albums_array[$album->id] = array("name" => $album->albumfilename, "description" => nl2br($album->comment), "pictures" => array());
-      }
-      // add pictures to album
-      array_push($albums_array[$album->id]["pictures"], array("name" => $album->picturefilename, "url" => $album->img_path));
+    public function activites()
+    {
+        $info = self::getInfoPage("activites");
+        return view('activites', ['pageTitle' => 'Activités', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
     }
 
-    //dd($albums_array);
+    public function presentation()
+    {
+        $info = self::getInfoPage("presentation");
+        return view('presentation', ['pageTitle' => 'Présentation', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
+    }
 
-    return view('category', ['category_name' => $category_name, 'albums' => $albums_array]);
-  }
+    public function realisations()
+    {
+//        $time_start = microtime(true);
+        $datastore = initGoogleDatastore();
 
-  public function presse()
-  {
-    $info = self::getInfoPage("presse");
-    return view('presse', ['pageTitle' => 'Presse', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
-  }
-
-  public function contact()
-  {
-    $info = self::getInfoPage("contact");
-    return view('contact', ['pageTitle' => 'Contact', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
-  }
-
-  public function mentions()
-  {
-    return view('mentions', ['pageTitle' => 'Mentions Légales']);
-  }
+        $queryCategories = $datastore->query()
+            ->kind('Category')
+//            ->projection(['name', 'thumbnail', 'url_friendly'])
+            ->order('sort');
+        $resultCategories = $datastore->runQuery($queryCategories);
+        $categories = [];
 
 
+        foreach ($resultCategories as $resultCategory) {
+            $categories[] = $resultCategory->get();
+        }
+//        $time_end = microtime(true);
+//        $time = $time_end - $time_start;
+//        dd($time);
 
+//        dd($categories);
+        $info = self::getInfoPage("realisations");
+        return view('realisations', ['pageTitle' => 'Réalisations', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'categories' => $categories]);
+    }
+
+    public function category($category_id)
+    {
+
+        $datastore = initGoogleDatastore();
+
+        $queryCategories = $datastore->query()
+            ->kind('Category')
+            ->filter('url_friendly', '=', $category_id);
+        $resultCategories = $datastore->runQuery($queryCategories);
+        $category = $resultCategories->current()->get();
+
+
+
+
+        //dd($albums_array);
+
+        return view('category', ['category' => $category]);
+    }
+
+    public function presse()
+    {
+        $info = self::getInfoPage("presse");
+        return view('presse', ['pageTitle' => 'Presse', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
+    }
+
+    public function contact()
+    {
+        $info = self::getInfoPage("contact");
+        return view('contact', ['pageTitle' => 'Contact', 'texts' => $info['texts'], 'pictures' => $info['pictures']]);
+    }
+
+    public function mentions()
+    {
+        return view('mentions', ['pageTitle' => 'Mentions Légales']);
+    }
 
 
     public function test()
-    {    
+    {
+        $datastore = initGoogleDatastore();
 
-  }
 
 
+    }
 
 
 }

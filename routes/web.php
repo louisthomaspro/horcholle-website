@@ -26,11 +26,9 @@ Route::get('admin/home', 'AdminController@home')->name('admin.home');
 Route::get('admin/syncPictures', 'AdminController@syncPictures')->name('admin.syncPictures');
 Route::get('admin/syncRealisations', 'AdminController@syncRealisations')->name('admin.syncRealisations');
 
-// Route::get('test', 'PageController@test')->name('test');
+Route::get('test', 'PageController@test')->name('test');
 
 Route::put('api/text/update', 'AdminController@updateText')->name('admin.updatetext');
-
-
 
 
 // Auth::routes();
@@ -48,9 +46,7 @@ $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 $this->post('password/reset', 'Auth\ResetPasswordController@reset');
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

@@ -75,6 +75,7 @@ class AdminController extends Controller
         $recursive = true; // Get subdirectories also?
         $contents = collect(Storage::disk('google')->listContents($rootDirectoryBasename, $recursive));
         $contents = $contents->toArray();
+//        dd($contents);
         return $contents;
     }
 
@@ -123,6 +124,21 @@ class AdminController extends Controller
     }
 
 
+
+
+    function stripAccents($str) {
+        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'  );
+        return strtr( $str, $unwanted_array );
+    }
+
+    function stripWhitespace($stripWhitespaces) {
+        return preg_replace('/\s/', '-', $stripWhitespaces);
+    }
+
     function syncRealisations()
     {
         set_time_limit(1000);
@@ -130,15 +146,26 @@ class AdminController extends Controller
         // INIT PATH
         $storage_folder = "realisations/";
 
-
+        initGoogleStorage();
         $datastore = initGoogleDatastore();
 
         // INIT DRIVE
         $drive = self::getDrive(Config::get('constants.drive.realisations'));
+        foreach ($drive as $key => $value) {
+            $drive[$key]['hierarchy'] = count(explode('/', $value['path'])) - 1;
+        }
 
-        $this->clearDatastoreKind('Drive');
 
-        $driveAdd = [];
+        uasort($drive, function ($a, $b) {
+            return $a['hierarchy'] > $b['hierarchy'];
+        });
+
+        $this->clearDatastoreKind('Category');
+
+
+        $categories = [];
+        $albums = [];
+
 
         $it = 0;
         $nb = count($drive);
@@ -146,44 +173,176 @@ class AdminController extends Controller
             $it++;
             Log::info($it . "/" . $nb);
 
+
+            $file['id'] = $it;
             $file['hierarchy'] = count(explode('/', $file['path'])) - 1; // 1=category 2=album 3=image
-            $file['parent_id'] = $file['dirname'];
-
-            if (array_key_exists('mimetype', $file)) {
-
-                // --IMG_PATH--
-                // If image download image and initialize $img_path
-                if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) { // It's an image
-                    $save_name = $file['basename'] . "." . $file['extension'];
-                    $file['img_path'] = self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name);
-                }
-
-                // --COMMENT--
-                // If google doc in an ablum --> initialize $comment
-                else if (($file['mimetype'] == 'application/vnd.google-apps.document') && $file['hierarchy'] == 3) {
-                    $service = Storage::disk('google')->getAdapter()->getService();
-                    $export = $service->files->export($file['basename'], 'text/plain', array('alt' => 'media'));
-                    $comment = $export->getBody()->getContents();
-                    $file['img_comment'] = str_replace("\r\n\r\n", "\r\n", $comment);
-                }
-
-            }
-
+            $explode = explode("/", $file['dirname']);
+            $file['parent_basename'] = end($explode);
+            $file['isImg'] = false;
             // --SORT--
-            $endSortValue = strspn($file['filename'], "0123456789");
-            $sortValue = substr($file['filename'], 0, $endSortValue);
-            $file['filename'] = substr($file['filename'], $endSortValue + 1);
+            $endSortValue = strspn($file['name'], "0123456789");
+            $sortValue = substr($file['name'], 0, $endSortValue);
             if ($sortValue == "") { // if there is no number at the begin of the filename
                 $sortValue = 999;
-                $file['filename'] = $file['filename'];
+            } else {
+                $file['name'] = substr($file['name'], $endSortValue + 1);
             }
-            $file['sort'] = $sortValue;
+            $file['sort'] = (int)$sortValue;
+            $file['url_friendly'] = preg_replace('/-+/', '-', $this->stripWhitespace($this->stripAccents(strtolower($file['name']))));
 
 
-            $driveAdd[] = $datastore->entity($datastore->key('Drive', $file['basename']), $file);
+            if ($file['hierarchy'] == 1 && $file['type'] == 'dir') { // BUILD CATEGORY
+
+                $key = $datastore->key('Category', $file['basename']);
+                $categories[$file['basename']] = $datastore->entity($key, [
+                    'name' => $file['name'],
+                    'url_friendly' => $file['url_friendly'],
+                    'sort' => $file['sort'],
+                    'thumbnail' => '',
+                    'albums' => array()
+                ]);
+
+
+            } else if ($file['hierarchy'] == 2) { // BUILD CATEGORY THUMBNAIL & ALBUMS
+
+                $explode = explode("/", $file['dirname']);
+                $album_basename = end($explode);
+
+
+                // ALBUM
+                if ($file['type'] == 'dir') {
+                    $tmpAlbum = array(
+                        'name' => $file['name'],
+                        'desc' => '',
+                        'sort' => $file['sort'],
+                        'images' => array()
+                    );
+                    $albums[$album_basename][$file['basename']] = $tmpAlbum;
+                } // THUMBNAIL
+                else if (array_key_exists('mimetype', $file) && in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) {
+                    $save_name = $file['basename'] . "." . $file['extension'];
+                    $tmpThumbnail = array(
+                        "name" => $file['name'],
+                        "img_path" => self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name)
+                    );
+                    $categories[$album_basename]['thumbnail'] = $tmpThumbnail;
+                }
+
+
+            } else if ($file['hierarchy'] == 3) { // IMAGES & DESCRIPTION
+
+
+                if (array_key_exists('mimetype', $file)) {
+                    $explode = explode("/", $file['dirname']);
+                    $album_basename = end($explode);
+                    $category_basename = $explode[count($explode) - 2];
+
+                    // IMAGE
+                    if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) {
+                        $save_name = $file['basename'] . "." . $file['extension'];
+                        $tmpImage = array(
+                            "name" => $file['name'],
+                            "sort" => $file['sort'],
+                            "img_path" => self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name)
+                        );
+                        array_push($albums[$category_basename][$album_basename]['images'], $tmpImage);
+
+                    } // DESCRIPTION
+                    else if ($file['mimetype'] == 'application/vnd.google-apps.document') {
+                        $service = Storage::disk('google')->getAdapter()->getService();
+                        $export = $service->files->export($file['basename'], 'text/plain', array('alt' => 'media'));
+                        $comment = $export->getBody()->getContents();
+                        $albums[$album_basename]['desc'] = str_replace("\r\n\r\n", "\r\n", $comment);
+                    }
+                }
+
+            }
+
         }
 
-        $datastore->insertBatch($driveAdd);
+        $categoriesAdd = [];
+
+        foreach ($categories as $keyCategory => $category) {
+            $tmpAlbums = $albums[$keyCategory];
+
+            //remove keys
+            $new_array = array();
+            foreach($tmpAlbums as $value) { $new_array[] = $value; }
+            $tmpAlbums = $new_array;
+
+            // sort albums
+            uasort($tmpAlbums, function ($a, $b) {
+                return $a['sort'] > $b['sort'];
+            });
+            foreach ($tmpAlbums as $keyAlbum => $tmpAlbum) {
+                $tmpImages = $tmpAlbum['images'];
+                uasort($tmpImages, function ($a, $b) {
+                    return $a['sort'] > $b['sort'];
+                });
+                $tmpAlbums[$keyAlbum]['images'] = $tmpImages;
+            }
+
+            $category['albums'] = $tmpAlbums;
+
+            $categoriesAdd[] = $category;
+        }
+
+        $datastore->insertBatch($categoriesAdd);
+
+        dd($categoriesAdd);
+
+
+
+
+
+
+
+
+//            $file['id'] = $it;
+//            $file['hierarchy'] = count(explode('/', $file['path'])) - 1; // 1=category 2=album 3=image
+//            $explode = explode("/", $file['dirname']);
+//            $file['parent_basename'] = end($explode);
+//            $file['isImg'] = false;
+//
+//
+//            if (array_key_exists('mimetype', $file)) {
+//
+//                // --IMG_PATH--
+//                // If image download image and initialize $img_path
+//                if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) { // It's an image
+//                    $save_name = $file['basename'] . "." . $file['extension'];
+//                    $file['img_path'] = self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name);
+//                    $file['isImg'] = true;
+//                }
+//
+//                // --COMMENT--
+//                // If google doc in an ablum --> initialize $comment
+//                else if (($file['mimetype'] == 'application/vnd.google-apps.document') && $file['hierarchy'] == 3) {
+//                    $service = Storage::disk('google')->getAdapter()->getService();
+//                    $export = $service->files->export($file['basename'], 'text/plain', array('alt' => 'media'));
+//                    $comment = $export->getBody()->getContents();
+//                    $file['img_comment'] = str_replace("\r\n\r\n", "\r\n", $comment);
+//                }
+//
+//            }
+//
+//            // --SORT--
+//            $endSortValue = strspn($file['name'], "0123456789");
+//            $sortValue = substr($file['name'], 0, $endSortValue);
+//            if ($sortValue == "") { // if there is no number at the begin of the filename
+//                $sortValue = 999;
+//            } else {
+//                $file['name'] = substr($file['name'], $endSortValue + 1);
+//            }
+//            $file['sort'] = (int)$sortValue;
+//
+//            $file['url_friendly'] = preg_replace('/-+/', '-', $this->stripWhitespace($this->stripAccents(strtolower($file['name']))));
+//
+//
+//            $driveAdd[] = $datastore->entity($datastore->key('Drive', $file['basename']), $file);
+//        }
+
+//        $datastore->insertBatch($driveAdd);
 
         Log::info("DONE !");
 

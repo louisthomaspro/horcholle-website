@@ -1,0 +1,8 @@
+indexes:
+
+  - kind: Category
+    properties:
+      - name: sort
+      - name: name
+      - name: thumbnail
+      - name: url_friendly
