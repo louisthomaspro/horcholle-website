@@ -25,7 +25,7 @@
           </a>
           <div class="dropdown-menu no-mobile-dropdown" aria-labelledby="navbarDropdown">
             @foreach ($categories_dd as $category_dd)
-             <a class="dropdown-item {{ Request::is('*realisations/' . $category_dd->id) ? 'active' : '' }}" href="{{ route('realisations') }}/{{ $category_dd->id }}">{{ $category_dd->filename }}</a>
+             <a class="dropdown-item {{ Request::is('*realisations/' . $category_dd['url_friendly']) ? 'active' : '' }}" href="{{ route('realisations') }}/{{ $category_dd['url_friendly'] }}">{{ $category_dd['name'] }}</a>
             @endforeach
           </div>
         </li>

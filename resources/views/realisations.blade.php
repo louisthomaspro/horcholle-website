@@ -22,10 +22,10 @@
           @foreach ($categories as $category)
             <div class="col-lg-6 mb-4 f-element">
               <figure class="effect-julia">
-                <div class="bg" style="background-image: url({{ bucket_url($category->img_path) }});"></div>
+                <div class="bg" style="background-image: url({{ bucket_url($category['thumbnail']['img_path']) }});" role="img" aria-label="{{ $category['thumbnail']['name'] }}"></div>
     						<figcaption>
-    							<h2>{{ $category->filename }}</h2>
-    							<a href="realisations/{{ $category->id }}">View more</a>
+    							<h2>{{ $category['name'] }}</h2>
+    							<a href="realisations/{{ $category['url_friendly'] }}">View more</a>
     						</figcaption>
     					</figure>
             </div>
