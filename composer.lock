@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4af0fcb8c8a9431dce6e569fdb5dd51c",
+    "content-hash": "aec343b7d2622b354bf0f71954cecc5d",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -613,6 +613,52 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
+            "time": "2019-02-06T21:40:58+00:00"
+        },
+        {
+            "name": "google/cloud-datastore",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-cloud-php-datastore.git",
+                "reference": "20395845b59d8facf0a0869e26060b10f03427b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-datastore/zipball/20395845b59d8facf0a0869e26060b10f03427b4",
+                "reference": "20395845b59d8facf0a0869e26060b10f03427b4",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-core": "^1.26",
+                "google/gax": "^0.38"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "phpdocumentor/reflection": "^3.0",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-datastore",
+                    "target": "googleapis/google-cloud-php-datastore.git",
+                    "path": "Datastore",
+                    "entry": "src/DatastoreClient.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\Datastore\\": "src",
+                    "GPBMetadata\\Google\\Datastore\\": "metadata"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Cloud Datastore Client for PHP",
             "time": "2019-02-06T21:40:58+00:00"
         },
         {
