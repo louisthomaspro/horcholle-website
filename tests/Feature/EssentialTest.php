@@ -17,11 +17,26 @@ class EssentialTest extends TestCase
         $this->assertEquals('200', $resp->getStatusCode());
     }
 
-    public function testDatabaseConnection()
+    public function testDatastoreConnection()
     {
-        $this->assertDatabaseHas('users', [
-            'email' => 'sarl.horcholle@gmail.com'
+        $datastore = initGoogleDatastore();
+
+        $key = $datastore->key('Test');
+        $entity = $datastore->entity($key, [
+            'name' => 'test'
         ]);
+        $datastore->insert($entity);
+
+        $query = $datastore->query()
+            ->kind('Test');
+        $result = $datastore->runQuery($query);
+        $entitiesKey = [];
+        foreach ($result as $entity) {
+            $entitiesKey[] = $entity->key();
+        }
+        $datastore->deleteBatch($entitiesKey);
+        $this->assertTrue(true, true);
+
     }
 
     public function testGoogleDrive()
