@@ -3,14 +3,13 @@
 @section('pageTitle', $pageTitle)
 
 @section('content')
-
   {{-- <div class="cover-center" style="height: 100%; background-image: url({{ bucket_url('img/accueil/accueil.jpg') }});"> --}}
   <div style="height: calc(100% - 75px);">
     <ul class="bck-parent cb-slideshow ">
-        <li><span style="background-image: url({{ bucket_url($pictures["background"]["1"]["img_path"]) }});" title="{{ $pictures["background"]["1"]["alt"] }}">Image 01</span></li>
-        <li><span style="background-image: url({{ bucket_url($pictures["background"]["2"]["img_path"]) }});" title="{{ $pictures["background"]["2"]["alt"] }}">Image 02</span></li>
-        <li><span style="background-image: url({{ bucket_url($pictures["background"]["3"]["img_path"]) }});" title="{{ $pictures["background"]["3"]["alt"] }}">Image 03</span></li>
-        <li><span style="background-image: url({{ bucket_url($pictures["background"]["4"]["img_path"]) }});" title="{{ $pictures["background"]["4"]["alt"] }}">Image 04</span></li>
+
+        @foreach ($pictures['background'] as $picture)
+            <li><span style="background-image: url({{ bucket_url($picture["img_path"]) }});" title="{{ $picture["name"] }}">{{ $picture['name'] }}</span></li>
+        @endforeach
     </ul>
     <div class="container">
 

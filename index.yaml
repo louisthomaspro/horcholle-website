@@ -6,3 +6,8 @@ indexes:
       - name: name
       - name: thumbnail
       - name: url_friendly
+
+  - kind: Picture
+    properties:
+      - name: page
+      - name: sort

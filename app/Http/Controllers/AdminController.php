@@ -6,6 +6,7 @@ use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Imagick;
 use Storage;
 
@@ -57,16 +58,6 @@ class AdminController extends Controller
         return $new_array;
     }
 
-    // Get local items like Gdrive or all attributes
-    function getLocal($drivelike = false)
-    {
-        $more = $drivelike ? "" : ", hierarchy, parent_id, comment, img_path";
-        $contents = DB::select('
-      select name, type, path, filename, extension, timestamp, mimetype, size, dirname, basename' . $more . ' from realisations
-    ');
-        $contents = json_decode(json_encode($contents), true); // stdClass to array
-        return $contents;
-    }
 
     // Get drive items
     function getDrive($rootDirectoryBasename)
@@ -143,6 +134,8 @@ class AdminController extends Controller
     {
         set_time_limit(1000);
 
+        Log::info("syncRealisations");
+
         // INIT PATH
         $storage_folder = "realisations/";
 
@@ -160,25 +153,16 @@ class AdminController extends Controller
             return $a['hierarchy'] > $b['hierarchy'];
         });
 
-        $this->clearDatastoreKind('Category');
-
 
         $categories = [];
         $albums = [];
 
 
-        $it = 0;
-        $nb = count($drive);
         foreach ($drive as $file) {
-            $it++;
-            Log::info($it . "/" . $nb);
 
-
-            $file['id'] = $it;
             $file['hierarchy'] = count(explode('/', $file['path'])) - 1; // 1=category 2=album 3=image
             $explode = explode("/", $file['dirname']);
             $file['parent_basename'] = end($explode);
-            $file['isImg'] = false;
             // --SORT--
             $endSortValue = strspn($file['name'], "0123456789");
             $sortValue = substr($file['name'], 0, $endSortValue);
@@ -287,62 +271,9 @@ class AdminController extends Controller
             $categoriesAdd[] = $category;
         }
 
+        $this->clearDatastoreKind('Category');
         $datastore->insertBatch($categoriesAdd);
 
-        dd($categoriesAdd);
-
-
-
-
-
-
-
-
-//            $file['id'] = $it;
-//            $file['hierarchy'] = count(explode('/', $file['path'])) - 1; // 1=category 2=album 3=image
-//            $explode = explode("/", $file['dirname']);
-//            $file['parent_basename'] = end($explode);
-//            $file['isImg'] = false;
-//
-//
-//            if (array_key_exists('mimetype', $file)) {
-//
-//                // --IMG_PATH--
-//                // If image download image and initialize $img_path
-//                if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) { // It's an image
-//                    $save_name = $file['basename'] . "." . $file['extension'];
-//                    $file['img_path'] = self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name);
-//                    $file['isImg'] = true;
-//                }
-//
-//                // --COMMENT--
-//                // If google doc in an ablum --> initialize $comment
-//                else if (($file['mimetype'] == 'application/vnd.google-apps.document') && $file['hierarchy'] == 3) {
-//                    $service = Storage::disk('google')->getAdapter()->getService();
-//                    $export = $service->files->export($file['basename'], 'text/plain', array('alt' => 'media'));
-//                    $comment = $export->getBody()->getContents();
-//                    $file['img_comment'] = str_replace("\r\n\r\n", "\r\n", $comment);
-//                }
-//
-//            }
-//
-//            // --SORT--
-//            $endSortValue = strspn($file['name'], "0123456789");
-//            $sortValue = substr($file['name'], 0, $endSortValue);
-//            if ($sortValue == "") { // if there is no number at the begin of the filename
-//                $sortValue = 999;
-//            } else {
-//                $file['name'] = substr($file['name'], $endSortValue + 1);
-//            }
-//            $file['sort'] = (int)$sortValue;
-//
-//            $file['url_friendly'] = preg_replace('/-+/', '-', $this->stripWhitespace($this->stripAccents(strtolower($file['name']))));
-//
-//
-//            $driveAdd[] = $datastore->entity($datastore->key('Drive', $file['basename']), $file);
-//        }
-
-//        $datastore->insertBatch($driveAdd);
 
         Log::info("DONE !");
 
@@ -352,29 +283,6 @@ class AdminController extends Controller
 
 
 
-    // function syncTexts() {
-
-    //   $service = Storage::disk('google')->getAdapter()->getService();
-    //   $export = $service->files->export(Config::get("constants.drive.texts"), 'text/csv',  array('alt' => 'media' )); // DEFINIR CONSTANTES
-    //   $content = $export->getBody()->getContents();
-
-    //   // Convert to array
-    //   $lines = preg_split('/\r\n/', $content); // '/\n|\r\n?/'
-    //   $csv = array();
-    //   foreach ($lines as $lines) {
-    //       array_push($csv, str_getcsv($lines));
-    //   }
-    //   array_shift($csv);
-
-    //   $deleted = DB::delete('delete from texts'); // Delete all from table
-    //   foreach ($csv as $row) {
-    //       DB::insert('insert into texts (page, context, id, value) values (?, ?, ?, ?)',
-    //       [ $row[0], $row[1], $row[2], $row[3] ]);
-    //   }
-
-    // }
-
-
     function syncPictures()
     {
 
@@ -382,85 +290,111 @@ class AdminController extends Controller
 
         Log::info("syncPictures");
 
-        $storage = initGoogleStorage();
+        initGoogleStorage();
+        $datastore = initGoogleDatastore();
 
         $storage_folder = "img/";
 
-        Log::info("Delete all lines in database");
-        $deleted = DB::delete('delete from pictures'); // Delete all from table
+        $imagesFolder = Config::get('constants.drive.images');
 
-        Log::info("Init drive info");
-        // PAGE D'ACCUEIL
-        $home = self::getDrive(Config::get('constants.drive.images'));
-        usort($home, function ($a, $b) {
-            return strcmp($a['name'], $b['name']);
-        });
 
-        Log::info("Update all image in database and download image if needed");
-        $it = 0;
-        $nb = count($home);
-        $log_msg = "";
-        foreach ($home as $file) { // ATTENDRE DE FAIRE LA FONCTION SAVEDRIVE
+        $pictureAdd = [];
 
-            $it++;
-            $log_msg = $it . "/" . $nb . " : ";
+        foreach ($imagesFolder as $keyName => $folder_id) {
 
-            if (array_key_exists('mimetype', $file)) {
-                if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) { // It's an image
+            $drive = self::getDrive($folder_id);
 
-                    $explode = explode("-", $file['filename'], 5);
-                    $page = $explode[0];
-                    $context = $explode[1];
-                    $id = $explode[2];
-                    $alt = $explode[3];
+//            dd($drive);
 
-                    $save_name = $file['basename'] . "." . $file['extension'];
+            foreach ($drive as $file) {
 
-                    $quality = 80;
-                    $width = 1280;
-                    $height = 1280;
 
-                    switch ($page . "-" . $context) {
-                        case 'accueil-background':
-                            $quality = 90;
-                            break;
 
-                        case 'activites-provider':
-                            $quality = 70;
-                            $height = 100;
-                            break;
+                // si c'est une image, on traite
+                if (array_key_exists('mimetype', $file)) {
+                    if (in_array($file['mimetype'], array("image/jpeg", "image/png", "image/gif", "image/bmp"))) { // It's an image
 
-                        case 'activites-skill_1':
-                            $width = 720;
-                            $height = 720;
-                            $quality = 50;
-                            break;
+                        $picture = [];
 
-                        case 'activites-skill_2':
-                            $width = 720;
-                            $height = 720;
-                            $quality = 50;
-                            break;
+                        // --SORT--
+                        $picture['name'] = $file['name'];
+                        $endSortValue = strspn($file['name'], "0123456789");
+                        $sortValue = substr($file['name'], 0, $endSortValue);
+                        if ($sortValue == "") { // if there is no number at the begin of the filename
+                            $sortValue = 999;
+                        } else {
+                            $picture['name'] = substr($file['name'], $endSortValue + 1);
+                        }
+                        $picture['sort'] = (int)$sortValue;
 
-                        default:
-                            # code...
-                            break;
+
+                        $save_name = $file['basename'] . "." . $file['extension'];
+
+
+                        $quality = 80;
+                        $width = 1280;
+                        $height = 1280;
+
+                        Log::info($keyName);
+
+                        switch($keyName) {
+                            case "accueil":
+                                $picture['page'] = 'accueil';
+                                $picture['context'] = 'background';
+                                $quality = 90;
+                                break;
+                            case "activite1":
+                                $picture['page'] = 'activites';
+                                $picture['context'] = 'activite1';
+                                $width = 720;
+                                $height = 720;
+                                $quality = 50;
+                                break;
+                            case "activite2":
+                                $picture['page'] = 'activites';
+                                $picture['context'] = 'activite2';
+                                $width = 720;
+                                $height = 720;
+                                $quality = 50;
+                                break;
+                            case "fournisseurs":
+                                $picture['page'] = 'activites';
+                                $picture['context'] = 'fournisseurs';
+                                $quality = 70;
+                                $height = 100;
+                                break;
+                            case "presentation":
+                                $picture['page'] = 'presentation';
+                                $picture['context'] = 'equipe';
+                                break;
+                            default:
+                                break;
+                        }
+
+
+                        $picture['img_path'] = self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name, $quality, $width, $height);
+
+                        $key = $datastore->key('Picture');
+                        $pictureAdd[] = $datastore->entity($key, $picture);
+
+
+
                     }
-                    $log_msg .= $save_name;
-                    $img_path = self::saveDriveImageToLocal($storage_folder, $file['path'], $save_name, $quality, $width, $height);
-
-                    $log_msg .= " - insert";
-                    DB::insert('insert into pictures (page, context, id, img_path, alt) values (?, ?, ?, ?, ?)',
-                        [$page, $context, $id, $img_path, $alt]);
-
-                    Log::info($log_msg);
-
                 }
-            }
-        }
+
+            } // end foreach file
+
+
+        } // end foreach folder
+
+        $this->clearDatastoreKind('Picture');
+        $datastore->insertBatch($pictureAdd);
+
+        Cache::flush();
+
         Log::info("DONE !");
 
-        return 'ok';
+        return response()->json(['result' => 'ok']);
 
     }
 
@@ -476,13 +410,26 @@ class AdminController extends Controller
 
     public function updateText(Request $request)
     {
+
         $value = $request->input('value');
         $page = $request->input('page');
         $context = $request->input('context');
         $id = $request->input('id');
 
-        $update = DB::update('update texts set value = ? where page = ? and context = ? and id = ?', [$value, $page, $context, $id]);
-        return response()->json(['success' => array($request->all(), $update)]);
+
+        $datastore = initGoogleDatastore();
+
+        $query = $datastore->query()
+            ->kind('Text')
+            ->filter('page', '=', $page)
+            ->filter('context', '=', $context)
+            ->filter('id', '=', $id);
+
+        $result = $datastore->runQuery($query)->current();
+        $result['value'] = $value;
+
+        $datastore->update($result);
+        Cache::forget('info'.$page);
     }
 
 }

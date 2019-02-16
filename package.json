@@ -13,20 +13,15 @@
         "axios": "^0.18",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
+        "font-awesome": "^4.7.0",
         "jquery": "^3.3.1",
-        "laravel-mix": "^2.1.11",
+        "laravel-mix": "^4.0.14",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "vue": "^2.5.17",
-        "@material/button": "^0.37.1",
-        "@material/card": "^0.38.0",
-        "@material/icon-button": "^0.38.0",
-        "@material/list": "^0.37.1",
-        "@material/ripple": "^0.37.1",
-        "font-awesome": "^4.7.0",
         "vue-template-compiler": "^2.5.17"
     }
 }

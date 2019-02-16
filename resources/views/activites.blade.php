@@ -7,7 +7,6 @@
     <div class="row justify-content-center mt-5">
       <div class="col-md-10">
 
-
         <div class="row">
 
           <div class="col-sm-5 text-style">
@@ -29,10 +28,10 @@
           <div class="col-sm-7">
 
             <div class="activites">
-              <a href="#activite0" data-toggle="modal" class="activite" title="{{ $pictures["skill_1"]["1"]["alt"] }}" style="background-image: url({{ bucket_url($pictures["skill_1"]["1"]["img_path"]) }})">
+              <a href="#activite0" data-toggle="modal" class="activite" title="{{ $pictures["activite1"][0]['name'] }}" style="background-image: url({{ bucket_url($pictures["activite1"][0]["img_path"]) }})">
                 <div class="inner">@include('templates.texteditable', ["page" => "activites", "context" => "skill_1", "id" => "title"])</div>
               </a>
-              <a href="#activite1" data-toggle="modal" class="activite" title="{{ $pictures["skill_2"]["1"]["alt"] }}" style="background-image: url({{ bucket_url($pictures["skill_2"]["1"]["img_path"]) }})">
+              <a href="#activite1" data-toggle="modal" class="activite" title="{{ $pictures["activite2"][0]['name']}}" style="background-image: url({{ bucket_url($pictures["activite2"][0]["img_path"]) }})">
                 <div class="inner">@include('templates.texteditable', ["page" => "activites", "context" => "skill_2", "id" => "title"])</div>
               </a>
             </div>
@@ -51,8 +50,8 @@
           </div>
 
           <div class="list-img mb-5">
-            @foreach ($pictures["provider"] as $pic)           
-            <img alt="{{ $pic['alt'] }}" src="{{ bucket_url($pic['img_path']) }}">
+            @foreach ($pictures["fournisseurs"] as $pic)
+            <img alt="{{ $pic['name'] }}" src="{{ bucket_url($pic['img_path']) }}">
             @endforeach
           </div>
         </div>
@@ -82,9 +81,9 @@
                                 @include('templates.texteditable', ["page" => "activites", "context" => "skill_1", "id" => "paragraph"]) 
                               </p>
                               <div class="row mb-3">
-                                @foreach ($pictures["skill_1"] as $pic)
+                                @foreach ($pictures["activite1"] as $pic)
                                 <div class="col-md-6">
-                                  <img width="100%" alt="{{ $pic['alt'] }}" src="{{ bucket_url($pic['img_path']) }}">
+                                  <img width="100%" alt="{{ $pic['name'] }}" src="{{ bucket_url($pic['img_path']) }}">
                                 </div>
                                 @endforeach
                               </div>
@@ -117,9 +116,9 @@
                                   @include('templates.texteditable', ["page" => "activites", "context" => "skill_2", "id" => "paragraph"])
                                 </p>
                                 <div class="row mt-4 mb-4">
-                                  @foreach ($pictures["skill_2"] as $pic)
+                                  @foreach ($pictures["activite2"] as $pic)
                                   <div class="col-md-6">
-                                    <img width="100%" alt="{{ $pic['alt'] }}" src="{{ bucket_url($pic['img_path']) }}">
+                                    <img width="100%" alt="{{ $pic['name'] }}" src="{{ bucket_url($pic['img_path']) }}">
                                   </div>
                                   @endforeach
                                 </div>

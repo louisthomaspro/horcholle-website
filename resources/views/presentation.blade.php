@@ -63,8 +63,8 @@
 
           <div class="row row-padding mt-4" id="lightgallery">
             <div class="col-sm-5">
-              @foreach ($pictures["team"] as $pic)
-              <img class="img_lg" width="100%" alt="{{ $pic['alt'] }}" src="{{ bucket_url($pic['img_path']) }}" data-src="{{ bucket_url($pic['img_path']) }}">
+              @foreach ($pictures["equipe"] as $pic)
+              <img class="img_lg" width="100%" alt="{{ $pic['name'] }}" src="{{ bucket_url($pic['img_path']) }}" data-src="{{ bucket_url($pic['img_path']) }}">
               @endforeach
             </div>
             <div class="col-sm-5 col-xs-12">
