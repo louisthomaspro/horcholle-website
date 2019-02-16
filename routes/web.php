@@ -26,7 +26,7 @@ Route::get('admin/home', 'AdminController@home')->name('admin.home');
 Route::get('admin/syncPictures', 'AdminController@syncPictures')->name('admin.syncPictures');
 Route::get('admin/syncRealisations', 'AdminController@syncRealisations')->name('admin.syncRealisations');
 
-Route::get('test', 'PageController@test')->name('test');
+//Route::get('test', 'PageController@test')->name('test');
 
 Route::put('api/text/update', 'AdminController@updateText')->name('admin.updatetext');
 

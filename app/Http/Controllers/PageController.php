@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Library\Drive;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -28,9 +26,7 @@ class PageController extends Controller
     function getInfoPage($page)
     {
 
-        $info = Cache::remember('info'.$page, 15, function() use ($page) {
-
-            Log::info('Load cache info');
+        $info = Cache::rememberForever('info-' . $page, function () use ($page) {
 
             $texts = [];
             $pictures = [];
@@ -64,14 +60,11 @@ class PageController extends Controller
             }
 
 
-
             return array("texts" => $texts, "pictures" => $pictures);
 
         });
 
         return $info;
-
-
 
 
     }
@@ -90,10 +83,8 @@ class PageController extends Controller
 
     public function realisations()
     {
-//        $time_start = microtime(true);
 
-        $categories = Cache::remember('categories', 15, function() {
-            Log::info('Load cache categories');
+        $categories = Cache::rememberForever('categories', function () {
             $datastore = initGoogleDatastore();
 
             $queryCategories = $datastore->query()
@@ -111,13 +102,6 @@ class PageController extends Controller
             return $categories;
         });
 
-
-//        $time_end = microtime(true);
-//        $time = $time_end - $time_start;
-//        dd($time);
-
-//        dd($categories);
-
         $info = self::getInfoPage("realisations");
 
         return view('realisations', ['pageTitle' => 'Réalisations', 'texts' => $info['texts'], 'pictures' => $info['pictures'], 'categories' => $categories]);
@@ -126,7 +110,7 @@ class PageController extends Controller
     public function category($category_id)
     {
 
-        $category = Cache::remember('category-'.$category_id, 15, function() use ($category_id) {
+        $category = Cache::rememberForever('category-' . $category_id, function () use ($category_id) {
             $datastore = initGoogleDatastore();
 
             $queryCategories = $datastore->query()
@@ -160,73 +144,8 @@ class PageController extends Controller
 
     public function test()
     {
-        // Sync sql texts and datastore texts
-
-        $datastore = initGoogleDatastore();
 
 
-        $query = $datastore->query()
-            ->kind('Text');
-        $result = $datastore->runQuery($query);
-
-        $entitiesKey = [];
-
-        foreach ($result as $entity) {
-            $entitiesKey[] = $entity->key();
-        }
-
-        $datastore->deleteBatch($entitiesKey);
-
-        $textAdd = [];
-
-        $lines = DB::select('select page, context, id, value from texts');
-        foreach ($lines as $row) {
-            $key = $datastore->key('Text');
-            $textAdd[] = $datastore->entity($key, [
-                'page' => $row->page,
-                'context' => $row->context,
-                'id' => $row->id,
-                'value' => $row->value
-            ]);
-        }
-
-        $datastore->insertBatch($textAdd);
-
-
-
-
-
-
-        $query = $datastore->query()
-            ->kind('Picture');
-        $result = $datastore->runQuery($query);
-
-        $entitiesKey = [];
-
-        foreach ($result as $entity) {
-            $entitiesKey[] = $entity->key();
-        }
-
-        $datastore->deleteBatch($entitiesKey);
-
-        $imgAdd = [];
-
-        $lines = DB::select('select page, context, id, img_path, alt from pictures');
-        foreach ($lines as $row) {
-            $key = $datastore->key('Picture');
-            $imgAdd[] = $datastore->entity($key, [
-                'page' => $row->page,
-                'context' => $row->context,
-                'id' => $row->id,
-                'alt' => $row->alt,
-                'img_path' => $row->img_path
-            ]);
-        }
-
-        $datastore->insertBatch($imgAdd);
-
-
-        return "ok";
     }
 
 

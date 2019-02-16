@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Config;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Imagick;
 use Storage;
 
@@ -115,18 +114,18 @@ class AdminController extends Controller
     }
 
 
-
-
-    function stripAccents($str) {
-        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
-            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'  );
-        return strtr( $str, $unwanted_array );
+    function stripAccents($str)
+    {
+        $unwanted_array = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
+            'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
+            'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
+            'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
+        return strtr($str, $unwanted_array);
     }
 
-    function stripWhitespace($stripWhitespaces) {
+    function stripWhitespace($stripWhitespaces)
+    {
         return preg_replace('/\s/', '-', $stripWhitespaces);
     }
 
@@ -251,7 +250,9 @@ class AdminController extends Controller
 
             //remove keys
             $new_array = array();
-            foreach($tmpAlbums as $value) { $new_array[] = $value; }
+            foreach ($tmpAlbums as $value) {
+                $new_array[] = $value;
+            }
             $tmpAlbums = $new_array;
 
             // sort albums
@@ -274,13 +275,14 @@ class AdminController extends Controller
         $this->clearDatastoreKind('Category');
         $datastore->insertBatch($categoriesAdd);
 
+        Cache::forget('categories_dd');
+
 
         Log::info("DONE !");
 
         return response()->json(['result' => 'ok']);
 
     }
-
 
 
     function syncPictures()
@@ -307,7 +309,6 @@ class AdminController extends Controller
 //            dd($drive);
 
             foreach ($drive as $file) {
-
 
 
                 // si c'est une image, on traite
@@ -337,7 +338,7 @@ class AdminController extends Controller
 
                         Log::info($keyName);
 
-                        switch($keyName) {
+                        switch ($keyName) {
                             case "accueil":
                                 $picture['page'] = 'accueil';
                                 $picture['context'] = 'background';
@@ -378,7 +379,6 @@ class AdminController extends Controller
                         $pictureAdd[] = $datastore->entity($key, $picture);
 
 
-
                     }
                 }
 
@@ -416,7 +416,6 @@ class AdminController extends Controller
         $context = $request->input('context');
         $id = $request->input('id');
 
-
         $datastore = initGoogleDatastore();
 
         $query = $datastore->query()
@@ -429,7 +428,7 @@ class AdminController extends Controller
         $result['value'] = $value;
 
         $datastore->update($result);
-        Cache::forget('info'.$page);
+        Cache::forget('info' . $page);
     }
 
 }
