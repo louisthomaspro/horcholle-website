@@ -19,7 +19,8 @@ before_install:
 - composer install --no-interaction
 - wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O ${HOME}/google-cloud-sdk/cloud_sql_proxy
 - chmod +x ${HOME}/google-cloud-sdk/cloud_sql_proxy
-- "${HOME}/google-cloud-sdk/cloud_sql_proxy -instances=horcholle:europe-west1:horcholle-instance-prod=tcp:3307 -credential_file=secrets/travis-cloud-sql-access.json &"
+- "${HOME}/google-cloud-sdk/cloud_sql_proxy -instances=horcholle:europe-west1:horcholle-instance-prod=tcp:3307
+  -credential_file=secrets/travis-cloud-sql-access.json &"
 script:
 - vendor/bin/phpunit
 deploy:
@@ -29,3 +30,6 @@ deploy:
   project: horcholle
   default: true
   on: master
+branches:
+  only:
+  - master
