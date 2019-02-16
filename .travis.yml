@@ -29,3 +29,7 @@ deploy:
   project: horcholle
   default: true
   on: master
+
+branches:
+  only:
+    - master
