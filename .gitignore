@@ -26,3 +26,9 @@ composer\.lock
 public/css/app\.css
 
 public/js/app\.js
+
+public/js/collapse\.js
+
+public/js/modal\.js
+
+public/js/util\.js

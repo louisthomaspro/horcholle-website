@@ -17,10 +17,7 @@ before_install:
 - tar -xzf credentials.tar.gz
 - composer self-update
 - composer install --no-interaction
-- wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O ${HOME}/google-cloud-sdk/cloud_sql_proxy
-- chmod +x ${HOME}/google-cloud-sdk/cloud_sql_proxy
-- "${HOME}/google-cloud-sdk/cloud_sql_proxy -instances=horcholle:europe-west1:horcholle-instance-prod=tcp:3307
-  -credential_file=secrets/travis-cloud-sql-access.json &"
+- npm run production
 script:
 - vendor/bin/phpunit
 deploy:
