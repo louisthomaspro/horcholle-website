@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c775bf3cfa2ce72630aa2cb1edf1c082",
+    "content-hash": "7419f78ad53ea2bc57a94ee01a6b7f10",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -211,21 +211,21 @@
         },
         {
             "name": "egs33/laravel-datastore-auth",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egs33/laravel-datastore-auth.git",
-                "reference": "7ff08d91b870e088dcc59550ee29801575a28b80"
+                "reference": "33aebf53175a85a75fbfca3e4aa95d24ece08fcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egs33/laravel-datastore-auth/zipball/7ff08d91b870e088dcc59550ee29801575a28b80",
-                "reference": "7ff08d91b870e088dcc59550ee29801575a28b80",
+                "url": "https://api.github.com/repos/egs33/laravel-datastore-auth/zipball/33aebf53175a85a75fbfca3e4aa95d24ece08fcc",
+                "reference": "33aebf53175a85a75fbfca3e4aa95d24ece08fcc",
                 "shasum": ""
             },
             "require": {
                 "google/cloud-datastore": "^1.5",
-                "laravel/framework": "^5.0",
+                "laravel/framework": "^5.5.0",
                 "php": "^7.1"
             },
             "require-dev": {
@@ -255,7 +255,7 @@
                     "email": "egs33.bicycle@gmail.com"
                 }
             ],
-            "time": "2018-11-27T15:42:18+00:00"
+            "time": "2019-02-17T11:07:48+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2608,6 +2608,56 @@
                 "x509"
             ],
             "time": "2019-01-27T19:37:29+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2016-06-16T16:22:20+00:00"
         },
         {
             "name": "psr/cache",
