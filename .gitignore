@@ -20,3 +20,5 @@ secrets
 feed.sql
 
 /\.idea/
+
+composer\.lock
