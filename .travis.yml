@@ -17,6 +17,7 @@ before_install:
 - tar -xzf credentials.tar.gz
 - composer self-update
 - composer install --no-interaction
+- npm install cross-env
 - npm run production
 script:
 - vendor/bin/phpunit
