@@ -28,6 +28,7 @@
   <!-- Scripts -->
   <script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
   <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/collapse.js') }}" type="text/javascript"></script>
 
   @yield('script')
 

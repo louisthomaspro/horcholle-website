@@ -20,7 +20,7 @@
           <a class="nav-link" href="{{ route('presentation') }}">PRÉSENTATION</a>
         </li>
         <li class="nav-item dropdown autodropdown {{ Request::is('*realisations*') ? 'active' : '' }}">
-          <a class="nav-link dropdown-toggle no-mobile-dropdown" href="{{ route('realisations') }}" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="{{ route('realisations') }}" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
             RÉALISATIONS
           </a>
           <div class="dropdown-menu no-mobile-dropdown" aria-labelledby="navbarDropdown">
