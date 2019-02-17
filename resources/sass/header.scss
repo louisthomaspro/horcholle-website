@@ -26,6 +26,9 @@
 
 
 @media only screen and (max-width: 991px) {
+  .dropdown-toggle::after {
+    display: none;
+  }
     .no-mobile-dropdown {
       display: none !important;
       &:after {
