@@ -22,3 +22,7 @@ feed.sql
 /\.idea/
 
 composer\.lock
+
+public/css/app\.css
+
+public/js/app\.js
