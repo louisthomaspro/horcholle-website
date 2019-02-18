@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Logging;
 
 use Google\Cloud\Logging\LoggingClient;
@@ -14,7 +16,7 @@ class CreateStackdriverLogger
      */
     public function __invoke(array $config)
     {
-        $logName = isset($config['logNam'e]) ? $config['logName'] : 'app';
+        $logName = isset($config['logName']) ? $config['logName'] : 'app';
         $psrLogger = LoggingClient::psrBatchLogger($logName);
         $handler = new PsrHandler($psrLogger);
         $logger = new Logger($logName, [$handler]);
