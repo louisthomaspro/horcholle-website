@@ -15,7 +15,8 @@
 * GAE & Travis CI --> https://cloud.google.com/solutions/continuous-delivery-with-travis-ci
 * Static files on GAE --> https://cloud.google.com/appengine/docs/standard/php7/serving-static-files
 * Google Storage --> https://cloud.google.com/appengine/docs/standard/php/googlestorage/
-* Cloud Sql Proxy --> https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
+* Laravel auth with datastore --> https://github.com/egs33/laravel-datastore-auth
+* Cache with redislabs --> https://cloud.google.com/appengine/docs/flexible/php/using-redislabs-memcache
 
 ---
 
