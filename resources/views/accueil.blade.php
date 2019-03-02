@@ -8,15 +8,15 @@
     <ul class="bck-parent cb-slideshow ">
 
         @foreach ($pictures['background'] as $picture)
-            <li><span style="background-image: url({{ bucket_url($picture["img_path"]) }});" title="{{ $picture["name"] }}">{{ $picture['name'] }}</span></li>
+            <li><span style="background-image: url({{ bucket_url($picture['img_path']) }});" title="{{ $picture["name"] }}">{{ $picture['name'] }}</span></li>
         @endforeach
     </ul>
     <div class="container">
 
       <div class="hometitle">
-        <h1>@include('templates.texteditable', ["page" => "accueil", "context" => "title", "id" => "main_title"])</h1>
+        <h1>@include('templates.texteditable', ["text" => ["accueil", "title", "main_title"]])</h1>
         <hr>
-        <h2>@include('templates.texteditable', ["page" => "accueil", "context" => "title", "id" => "sub_title"])</h2>
+        <h2>@include('templates.texteditable', ["text" => ["accueil", "title", "sub_title"]])</h2>
 
         {{-- <a href="{{ route('realisations') }}"><button type="button" class="btn-discover mt-3" data-dismiss="modal">Découvrir nos réalisations</button></a> --}}
       </div>

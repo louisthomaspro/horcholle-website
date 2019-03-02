@@ -14,12 +14,12 @@
               Notre activité
             </h3> --}}
             <h2 class="title">
-              @include('templates.texteditable', ["page" => "activites", "context" => "part_1", "id" => "title"])
+              @include('templates.texteditable', ["text" => ["activites", "part_1", "title"]])
             </h2>
             <hr class="separation">
             <div class="text">
               <p>
-                @include('templates.texteditable', ["page" => "activites", "context" => "part_1", "id" => "paragraph"])
+                @include('templates.texteditable', ["text" => ["activites", "part_1", "paragraph"]])
               </p>
             </div>
             <a href="{{ route('contact') }}"><button class="button">Faire une demande</button></a>
@@ -28,11 +28,11 @@
           <div class="col-sm-7">
 
             <div class="activites">
-              <a href="#activite0" data-toggle="modal" class="activite" title="{{ $pictures["activite1"][0]['name'] }}" style="background-image: url({{ bucket_url($pictures["activite1"][0]["img_path"]) }})">
-                <div class="inner">@include('templates.texteditable', ["page" => "activites", "context" => "skill_1", "id" => "title"])</div>
+              <a href="#activite0" data-toggle="modal" class="activite" title="{{ $pictures["activite1"][0]['name'] }}" style="background-image: url({{ bucket_url($pictures["activite1"][0]['img_path']) }})">
+                <div class="inner">@include('templates.texteditable', ["text" => ["activites", "skill_1", "title"]])</div>
               </a>
-              <a href="#activite1" data-toggle="modal" class="activite" title="{{ $pictures["activite2"][0]['name']}}" style="background-image: url({{ bucket_url($pictures["activite2"][0]["img_path"]) }})">
-                <div class="inner">@include('templates.texteditable', ["page" => "activites", "context" => "skill_2", "id" => "title"])</div>
+              <a href="#activite1" data-toggle="modal" class="activite" title="{{ $pictures["activite2"][0]['name']}}" style="background-image: url({{ bucket_url($pictures["activite2"][0]['img_path']) }})">
+                <div class="inner">@include('templates.texteditable', ["text" => ["activites", "skill_2", "title"]])</div>
               </a>
             </div>
 
@@ -42,10 +42,10 @@
 
 
         <div class="text-style mt-5">
-          <h2 class="title text-center">@include('templates.texteditable', ["page" => "activites", "context" => "part_2", "id" => "title"])</h2>
+          <h2 class="title text-center">@include('templates.texteditable', ["text" => ["activites", "part_2", "title"]])</h2>
           <div class="text text-center mt-3">
             <p class="ng-binding">
-              @include('templates.texteditable', ["page" => "activites", "context" => "part_2", "id" => "paragraph"])
+              @include('templates.texteditable', ["text" => ["activites", "part_2", "paragraph"]])
             </p>
           </div>
 
@@ -57,6 +57,22 @@
         </div>
 
       </div>
+
+        <div class="row">
+            <div class="col-sm-6 text-style">
+                <h2 class="s-title">
+                    @include('templates.texteditable', ["text" => ["activites", "part_1", "title"]])
+                </h2>
+                <div class="text">
+                    <p>
+                        @include('templates.texteditable', ["text" => ["activites", "part_2", "paragraph"]])
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <a href="#activite0" data-toggle="modal" class="activite" title="{{ $pictures["activite1"][0]['name'] }}" style="background-image: url({{ bucket_url($pictures["activite1"][0]['img_path']) }})"></a>
+            </div>
+        </div>
     </div>
   </div>
 
@@ -76,9 +92,9 @@
                         <div class="col-md-10">
                           <div class="modal-body text-style">
                               <!-- Project Details Go Here -->
-                              <h2 class="title">@include('templates.texteditable', ["page" => "activites", "context" => "skill_1", "id" => "title"])</h2>
+                              <h2 class="title">@include('templates.texteditable', ["text" => ["activites", "skill_1", "title"]])</h2>
                               <p class="text mt-4 mb-4">
-                                @include('templates.texteditable', ["page" => "activites", "context" => "skill_1", "id" => "paragraph"]) 
+                                @include('templates.texteditable', ["text" => ["activites", "skill_1", "paragraph"]])
                               </p>
                               <div class="row mb-3">
                                 @foreach ($pictures["activite1"] as $pic)
@@ -111,9 +127,9 @@
                           <div class="col-md-10">
                             <div class="modal-body text-style">
                                 <!-- Project Details Go Here -->
-                                <h2 class="title">@include('templates.texteditable', ["page" => "activites", "context" => "skill_2", "id" => "title"])</h2>
+                                <h2 class="title">@include('templates.texteditable', ["text" => ["activites", "skill_2", "title"]])</h2>
                                 <p class="text mt-4">
-                                  @include('templates.texteditable', ["page" => "activites", "context" => "skill_2", "id" => "paragraph"])
+                                  @include('templates.texteditable', ["text" => ["activites", "skill_2", "paragraph"]])
                                 </p>
                                 <div class="row mt-4 mb-4">
                                   @foreach ($pictures["activite2"] as $pic)

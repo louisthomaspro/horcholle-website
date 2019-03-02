@@ -14,37 +14,37 @@
             Présentation
           </h3> --}}
           <h2 class="title text-center">
-            @include('templates.texteditable', ["page" => "presentation", "context" => "part_1", "id" => "title"])
+            @include('templates.texteditable', ["text" => ["presentation", "part_1", "title"]])
           </h2>
 
 
           <ul class="timeline mt-5">
             <li>
               <div class="timestamp">
-                <span class="date">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "date_1"])</span>
+                <span class="date">@include('templates.texteditable', ["text" => ["presentation", "timeline", "date_1"]])</span>
               </div>
               <div class="status">
                 <div class="mask"></div>
-                <p class="mb-2">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "paragraph_1"])</p>
+                <p class="mb-2">@include('templates.texteditable', ["text" => ["presentation", "timeline", "paragraph_1"]])</p>
               </div>
             </li>
             <li>
               <div class="timestamp">
-                <span class="date">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "date_2"])</span>
+                <span class="date">@include('templates.texteditable', ["text" => ["presentation", "timeline", "date_2"]])</span>
               </div>
               <div class="status">
                 <div class="mask"></div>
-                <p class="mb-2">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "paragraph_2"])</p>
+                <p class="mb-2">@include('templates.texteditable', ["text" => ["presentation", "timeline", "paragraph_2"]])</p>
                 <p></p>
               </div>
             </li>
             <li>
               <div class="timestamp">
-                <span class="date">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "date_3"])</span>
+                <span class="date">@include('templates.texteditable', ["text" => ["presentation", "timeline", "date_3"]])</span>
               </div>
               <div class="status">
                 <div class="mask"></div>
-                <p class="mb-2">@include('templates.texteditable', ["page" => "presentation", "context" => "timeline", "id" => "paragraph_3"])</p>
+                <p class="mb-2">@include('templates.texteditable', ["text" => ["presentation", "timeline", "paragraph_3"]])</p>
               </div>
             </li>
           </ul>
@@ -53,12 +53,12 @@
 
           <div class="text text-center mt30">
             <p>
-              @include('templates.texteditable', ["page" => "presentation", "context" => "part_1", "id" => "paragraph"])
+              @include('templates.texteditable', ["text" => ["presentation", "part_1", "paragraph"]])
             </p>
           </div>
 
           <h2 class="title text-center mt-5">
-            @include('templates.texteditable', ["page" => "presentation", "context" => "part_2", "id" => "title"])
+            @include('templates.texteditable', ["text" => ["presentation", "part_2", "title"]])
           </h2>
 
           <div class="row row-padding mt-4" id="lightgallery">
@@ -70,7 +70,7 @@
             <div class="col-sm-5 col-xs-12">
               <div class="text">
                 <p>
-                  @include('templates.texteditable', ["page" => "presentation", "context" => "part_2", "id" => "paragraph"])
+                  @include('templates.texteditable', ["text" => ["presentation", "part_2", "paragraph"]])
                 </p>
               </div>
             </div>
@@ -78,12 +78,12 @@
 
 
           <h2 class="title text-center mt-5">
-            @include('templates.texteditable', ["page" => "presentation", "context" => "part_3", "id" => "title"])
+            @include('templates.texteditable', ["text" => ["presentation", "part_3", "title"]])
           </h2>
 
           <div class="text text-center mt-4">
             <p>
-              @include('templates.texteditable', ["page" => "presentation", "context" => "part_3", "id" => "paragraph"])
+              @include('templates.texteditable', ["text" => ["presentation", "part_3", "paragraph"]])
             </p>
           </div>
 

@@ -10,12 +10,12 @@
 
         <div class="text-style">
           <h2 class="title">
-            @include('templates.texteditable', ["page" => "presentation", "context" => "part_1", "id" => "title"])
+            @include('templates.texteditable', ["text" => ["presentation", "part_1", "title"]])
           </h2>
           <hr class="separation">
         </div>
 
-        <p>@include('templates.texteditable', ["page" => "presentation", "context" => "part_1", "id" => "paragraph"])</p>
+        <p>@include('templates.texteditable', ["text" => ["presentation", "part_1", "paragraph"]])</p>
 
         <div class="row albumeffect f-gallery mt-4">
 

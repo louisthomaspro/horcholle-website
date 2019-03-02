@@ -9,20 +9,20 @@
 
         
         
-        <h2 class="title text-center mt-4">@include('templates.texteditable', ["page" => "contact", "context" => "title", "id" => "main_title"])</h2>
-        <h4 class="text-center text mt-4">@include('templates.texteditable', ["page" => "contact", "context" => "title", "id" => "sub_title"])</h4>
+        <h2 class="title text-center mt-4">@include('templates.texteditable', ["text" => ["contact", "title", "main_title"]])</h2>
+        <h4 class="text-center text mt-4">@include('templates.texteditable', ["text" => ["contact", "title", "sub_title"]])</h4>
         <div class="mt-5 ml-3">
             <div class="contact_info mb-3">
-            <i class="fa fa-map-marker" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "adress"])
+            <i class="fa fa-map-marker" aria-hidden="true"></i>@include('templates.texteditable', ["text" => ["contact", "info", "adress"]])
             </div>
             <div class="contact_info mb-3">
-            <i class="fa fa-clock-o" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "schedule"])
+            <i class="fa fa-clock-o" aria-hidden="true"></i>@include('templates.texteditable', ["text" => ["contact", "info", "schedule"]])
             </div>
             <div class="contact_info mb-3">
-            <i class="fa fa-phone" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "phone"])
+            <i class="fa fa-phone" aria-hidden="true"></i>@include('templates.texteditable', ["text" => ["contact", "info", "phone"]])
             </div>
             <div class="contact_info mb-3">
-            <i class="fa fa-envelope" aria-hidden="true"></i>@include('templates.texteditable', ["page" => "contact", "context" => "info", "id" => "mail"])
+            <i class="fa fa-envelope" aria-hidden="true"></i>@include('templates.texteditable', ["text" => ["contact", "info", "mail"]])
             </div>
             <div class="contact_info mb-3">
             <i class="fa fa-facebook" aria-hidden="true"></i><a href="https://www.facebook.com/SARL-Horcholle-Fabien-150517972410986/" target="_blank">Suivez-nous !</a>
