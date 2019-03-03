@@ -73,7 +73,7 @@ class AdminController extends Controller
             $image->setImageCompressionQuality($quality);
             $image->stripImage();
 
-
+            Log::info('Saving to '.$absolute_path.'...');
             file_put_contents($absolute_path, $image); // Save
 
         }
