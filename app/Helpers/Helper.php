@@ -5,7 +5,7 @@ if (!function_exists('bucket_url')) {
 
     function bucket_url($url)
     {
-        return "https://storage.cloud.google.com/" . env('GOOGLE_STORAGE_BUCKET') . "/" . $url;
+        return "https://storage.googleapis.com/" . env('GOOGLE_STORAGE_BUCKET') . "/" . $url;
     }
 
 }
