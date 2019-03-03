@@ -25,38 +25,6 @@ class AdminController extends Controller
 
     // https://github.com/ivanvermeyen/laravel-google-drive-demo
 
-    // Return array of $b items not in $a
-    function flip_isset_diff($b, $a)
-    { // very little bit faster
-        $at = array_flip($a);
-        $d = array();
-        foreach ($b as $i)
-            if (!isset($at[$i]))
-                $d[] = $i;
-        return $d;
-    }
-
-    // Map each $item in $array with $item[$key] key value
-    function map_with($array, $key)
-    {
-        $array_with_keys = array_fill_keys(self::extract_key($array, $key), 'test');
-        for ($i = 0; $i < count($array); $i++) {
-            $key_value = $array[$i][$key];
-            $array_with_keys[$key_value] = $array[$i];
-        }
-        return $array_with_keys;
-    }
-
-    // Extract all $item[$key] values from $array
-    function extract_key($array, $key)
-    {
-        $new_array = array();
-        foreach ($array as $item) {
-            array_push($new_array, $item[$key]);
-        }
-        return $new_array;
-    }
-
 
     // Get drive items
     function getDrive($rootDirectoryBasename)
@@ -129,6 +97,9 @@ class AdminController extends Controller
         return preg_replace('/\s/', '-', $stripWhitespaces);
     }
 
+
+
+
     function syncRealisations()
     {
         set_time_limit(1000);
@@ -143,22 +114,22 @@ class AdminController extends Controller
 
         // INIT DRIVE
         $drive = self::getDrive(Config::get('constants.drive.realisations'));
+        // Add hierarchy key (depth in drive)
         foreach ($drive as $key => $value) {
             $drive[$key]['hierarchy'] = count(explode('/', $value['path'])) - 1;
         }
 
-
+        // Sort by hierarchy
         uasort($drive, function ($a, $b) {
             return $a['hierarchy'] > $b['hierarchy'];
         });
 
-
         $categories = [];
         $albums = [];
 
-
         foreach ($drive as $file) {
 
+            // Get all information
             $file['hierarchy'] = count(explode('/', $file['path'])) - 1; // 1=category 2=album 3=image
             $explode = explode("/", $file['dirname']);
             $file['parent_basename'] = end($explode);
@@ -175,7 +146,6 @@ class AdminController extends Controller
 
 
             if ($file['hierarchy'] == 1 && $file['type'] == 'dir') { // BUILD CATEGORY
-
                 $key = $datastore->key('Category', $file['basename']);
                 $categories[$file['basename']] = $datastore->entity($key, [
                     'name' => $file['name'],
@@ -185,12 +155,10 @@ class AdminController extends Controller
                     'albums' => array()
                 ]);
 
-
-            } else if ($file['hierarchy'] == 2) { // BUILD CATEGORY THUMBNAIL & ALBUMS
+            } else if ($file['hierarchy'] == 2) { // BUILD THUMBNAIL & ALBUMS
 
                 $explode = explode("/", $file['dirname']);
                 $album_basename = end($explode);
-
 
                 // ALBUM
                 if ($file['type'] == 'dir') {
@@ -285,6 +253,9 @@ class AdminController extends Controller
     }
 
 
+
+
+
     function syncPictures()
     {
 
@@ -368,6 +339,10 @@ class AdminController extends Controller
                                 $picture['page'] = 'presentation';
                                 $picture['context'] = 'equipe';
                                 break;
+                            case "fournisseurs-photos":
+                                $picture['page'] = 'activites';
+                                $picture['context'] = 'fournisseurs-photos';
+                                break;
                             default:
                                 break;
                         }
@@ -411,7 +386,8 @@ class AdminController extends Controller
     public function updateText(Request $request)
     {
 
-        $value = $request->input('value');
+        $value = str_replace('|', ' ', $request->input('value'));
+        Log::info($value);
         $page = $request->input('page');
         $context = $request->input('context');
         $id = $request->input('id');
@@ -425,10 +401,19 @@ class AdminController extends Controller
             ->filter('id', '=', $id);
 
         $result = $datastore->runQuery($query)->current();
+        if (is_null($result)) {
+            $key = $datastore->key('Text');
+            $result = $datastore->entity($key, [
+                'page' => $page,
+                'context' => $context,
+                'id' => $id
+            ]);
+        }
+
         $result['value'] = $value;
 
-        $datastore->update($result);
-        Cache::forget('info' . $page);
+        $datastore->upsert($result);
+        Cache::forget('info-' . $page);
     }
 
 }

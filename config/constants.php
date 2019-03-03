@@ -9,7 +9,8 @@ return [
             'activite1' => '1V_hg3QMcdo4F5Hn-PX2pEnnOzSsszWQI',
             'activite2' => '18an1e2dP8cy-Zdd3bc1rI2gm4mtuSFHF',
             'fournisseurs' => '1Vv_9GsWmShL00Zwrx-WD2JPRQ_COI25b',
-            'presentation' => '1OKWTSTC-uHNWi9DEWEgaCLyfjnUumByS'
+            'presentation' => '1OKWTSTC-uHNWi9DEWEgaCLyfjnUumByS',
+            'fournisseurs-photos' => '16OMqqDm4agkg4MUklerdhP87yLaZJOTT'
         ]
     ]
 ];

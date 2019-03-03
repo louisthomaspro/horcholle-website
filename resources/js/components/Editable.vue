@@ -7,7 +7,7 @@
 
         <div style="font-family: Arial;font-size: 16px;">
             <div class="form-group mb-1">
-            <textarea :disabled="saving" v-model="tempValue" class="form-control" aria-label="With textarea"></textarea>
+            <textarea :disabled="saving" v-model="tempValue" class="form-control" style="height: 100px;" aria-label="With textarea"></textarea>
           </div>
              <div class="text-right mt-1">
             <button @click="saveEdit" class="btn btn-primary" type="button">Save<span v-if="saving">&nbsp;<i class="fa fa-spinner fa-spin"></i></span></button>
@@ -57,10 +57,10 @@
 
                 axios
                   .put('api/text/update', {
-                      value: this.tempValue,
+                      value: this.tempValue.split(' ').join('|'),
                       page: this.page,
                       context: this.context,
-                        id : this.id
+                      id : this.id
                     })
                   .then(response => {
                     this.value = this.tempValue;
