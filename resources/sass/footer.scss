@@ -4,12 +4,15 @@
   text-align: center;
   font-size: 14px;
   line-height: 75px;
+	max-height: 76px;
+	overflow: hidden;
 
   	.parent {
   		display: inline-block;
    		vertical-align: middle;
 
 		span {
+			display: inline-block;
 			color: #b1b1b1;
 		}
 	}

@@ -5,7 +5,7 @@
 
   <meta name="description" content="Entreprise Artisanale de Maçonnerie & Taille de Pierre. L'entreprise évolue dans le domaine de la restauration du bati ancien.">
   <meta name="keywords" content="Taille de pierre, Tailleur de pierre, Pierreux ,Bonneuil-en-Valois ,Crépy-en-Valois ,Maçon ,Maçonnerie ,Vallée de l'automne ,Restauration du bati ancien ,Rénovation de batiment ,Pierre dure ,Carrière ,Artisan ,savoir faire ,Tradition ,Pavés ,moëllons ,Dallage ,pavage ,paveur ,carreleur ,carrelage">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="Louis THOMAS">
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
