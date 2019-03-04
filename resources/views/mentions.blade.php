@@ -26,7 +26,7 @@ Vos mentions légales :
 <strong>Responsable publication</strong> : Fabien HORCHOLLE – sarl.horcholle@gmail.com<br />
 Le responsable publication est une personne physique ou une personne morale.<br />
 <strong>Webmaster</strong> : Louis THOMAS – louisthomas.pro@gmail.com<br />
-<strong>Hébergeur</strong> : OVH – 2 rue Kellermann - 59100 Roubaix - France<br />
+<strong>Hébergeur</strong> : Google Cloud Platform – Gordon House, Barrow Street, Dublin 4, Irlande<br />
 Crédits : <br />
 Le modèle de mentions légales est offert par Subdelirium.com <a target="_blank" href="https://www.subdelirium.com/generateur-de-mentions-legales/" alt="generateur de mentions légales">Générateur de mentions légales</a></p>
 
