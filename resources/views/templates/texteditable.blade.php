@@ -11,5 +11,5 @@
             {!! nl2br($display_text) !!}
         </vue-editable>
 @else {{--visitor--}}
-    {!! nl2br($display_text) !!}
+<span style="white-space: pre-wrap;">{!! nl2br($display_text) !!}</span>
 @endif
